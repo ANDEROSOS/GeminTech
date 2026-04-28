@@ -4,7 +4,7 @@
 
 Sistema completo de gestión VPS para SSH/VPN. Portable en cualquier proveedor.
 
-> 🟢 **Cloud Run activo:** `https://gemintech-proxy-127qfhmifa-rj.a.run.app` — Region: `southamerica-east1`
+> 🟢 **Cloud Run activo:** `https://gemintech-proxy-49300283327.southamerica-east1.run.app` — Region: `southamerica-east1`
 
 ---
 

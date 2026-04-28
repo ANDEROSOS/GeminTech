@@ -2,12 +2,12 @@
 CONFIGURACION NPV TUNNEL / HTTP INJECTOR
 ============================================
 
-SERVIDOR: gemintech-proxy-127qfhmifa-rj.a.run.app
+SERVIDOR: gemintech-proxy-49300283327.southamerica-east1.run.app
 PUERTO: 443
 SSL: ON
 
 PAYLOAD:
-GET / HTTP/1.1[crlf]Host: gemintech-proxy-127qfhmifa-rj.a.run.app[crlf]Connection: Upgrade[crlf]Upgrade: websocket[crlf]x-auth-key: Ecuador2026_Secreto[crlf][crlf]
+GET / HTTP/1.1[crlf]Host: gemintech-proxy-49300283327.southamerica-east1.run.app[crlf]Connection: Upgrade[crlf]Upgrade: websocket[crlf]x-auth-key: Ecuador2026_Secreto[crlf][crlf]
 
 SNI: firebase-settings.crashlytics.com
 
@@ -21,7 +21,7 @@ Usuario: (crear en el panel con 'menu' opcion 1)
 ============================================
 CLOUD RUN
 ============================================
-URL:    https://gemintech-proxy-127qfhmifa-rj.a.run.app
+URL:    https://gemintech-proxy-49300283327.southamerica-east1.run.app
 Region: southamerica-east1
 
 ============================================

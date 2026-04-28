@@ -16,7 +16,7 @@ CONFIGURACION NPV TUNNEL
 ============================================
 
 Protocol:       SSH-TLS-Payload
-SSH Host:       gemintech-proxy-127qfhmifa-rj.a.run.app
+SSH Host:       gemintech-proxy-49300283327.southamerica-east1.run.app
 SSH Port:       443
 Udpgw Port:     7300
 TLS Version:    TLS 1.2
@@ -26,12 +26,12 @@ SNI:            firebase-settings.crashlytics.com
 PAYLOAD (COPIAR EXACTO)
 ============================================
 
-GET / HTTP/1.1[crlf]Host: gemintech-proxy-127qfhmifa-rj.a.run.app[crlf]Connection: Upgrade[crlf]Upgrade: websocket[crlf]x-auth-key: Ecuador2026_Secreto[crlf][crlf]
+GET / HTTP/1.1[crlf]Host: gemintech-proxy-49300283327.southamerica-east1.run.app[crlf]Connection: Upgrade[crlf]Upgrade: websocket[crlf]x-auth-key: Ecuador2026_Secreto[crlf][crlf]
 
 ============================================
 CLOUD RUN
 ============================================
-URL:    https://gemintech-proxy-127qfhmifa-rj.a.run.app
+URL:    https://gemintech-proxy-49300283327.southamerica-east1.run.app
 Region: southamerica-east1 (São Paulo)
 
 Variables de entorno:
