@@ -1,12 +1,12 @@
 ╔══════════════════════════════════════════════════════════╗
-║      CONFIGURACION NPV TUNNEL - VPS ADM CLON             ║
+║      CONFIGURACION NPV TUNNEL - GEMINTECH PANEL           ║
 ║      @gemintechchannel - FUNCIONANDO 100%                 ║
 ╚══════════════════════════════════════════════════════════╝
 
 ============================================
 DATOS DEL VPS
 ============================================
-IP: 34.19.51.198
+IP: 172.245.184.188
 Usuario SSH: (crear en panel con 'menu' opcion 1)
 Puerto SSH: 22
 Puerto UDPGW: 7300
@@ -16,7 +16,7 @@ CONFIGURACION NPV TUNNEL
 ============================================
 
 Protocol:       SSH-TLS-Payload
-SSH Host:       firebase-settings.crashlytics.com
+SSH Host:       gemintech-proxy-127qfhmifa-rj.a.run.app
 SSH Port:       443
 Udpgw Port:     7300
 TLS Version:    TLS 1.2
@@ -26,17 +26,17 @@ SNI:            firebase-settings.crashlytics.com
 PAYLOAD (COPIAR EXACTO)
 ============================================
 
-GET / HTTP/1.1[crlf]Host: cloudrun-gemintech-1029036414572.us-south1.run.app[crlf]Connection: Upgrade[crlf]Upgrade: websocket[crlf]x-auth-key: Ecuador2026_Secreto[crlf][crlf]
+GET / HTTP/1.1[crlf]Host: gemintech-proxy-127qfhmifa-rj.a.run.app[crlf]Connection: Upgrade[crlf]Upgrade: websocket[crlf]x-auth-key: Ecuador2026_Secreto[crlf][crlf]
 
 ============================================
 CLOUD RUN
 ============================================
-URL: https://cloudrun-gemintech-1029036414572.us-south1.run.app
-Region: us-south1
+URL:    https://gemintech-proxy-127qfhmifa-rj.a.run.app
+Region: southamerica-east1 (São Paulo)
 
 Variables de entorno:
-  PROXY_TARGETS: 34.19.51.198:80
-  KEY_TARGETS: Ecuador2026_Secreto
+  PROXY_TARGETS: 172.245.184.188:80
+  KEY_TARGETS:   Ecuador2026_Secreto
 
 ============================================
 IMPORTANTE
@@ -49,16 +49,23 @@ IMPORTANTE
 ============================================
 SERVICIOS ACTIVOS EN EL VPS
 ============================================
-- SSH: Puerto 22
-- WebSocket Python: Puerto 80
-- BadVPN UDPGW: Puerto 7300
-- python.80.service: activo
-- badvpn-udpgw.7300.service: activo
+- SSH:            Puerto 22
+- WebSocket SSH:  Puerto 80
+- BadVPN UDPGW:   Puerto 7300
+- GeminTech API:  Puerto 9000
 
 ============================================
 COMANDO PARA INSTALAR EN OTRO VPS
 ============================================
 
-bash <(curl -sL https://raw.githubusercontent.com/ANDEROSOS/GeminTech/master/install.sh)
+bash <(curl -sL https://raw.githubusercontent.com/ANDEROSOS/GeminTech/main/install.sh)
+
+============================================
+MIGRAR CLOUD RUN A OTRO VPS
+============================================
+
+cd GeminTech/cloudrun
+bash deploy.sh
+# Ingresa la nueva IP cuando pregunte
 
 ============================================

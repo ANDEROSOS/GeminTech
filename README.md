@@ -1,8 +1,10 @@
 # GeminTech VPS Panel
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://shell.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/AdmRufus/GeminTech&cloudshell_working_dir=cloudrun)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://shell.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/ANDEROSOS/GeminTech&cloudshell_working_dir=cloudrun)
 
 Sistema completo de gestión VPS para SSH/VPN. Portable en cualquier proveedor.
+
+> 🟢 **Cloud Run activo:** `https://gemintech-proxy-127qfhmifa-rj.a.run.app` — Region: `southamerica-east1`
 
 ---
 

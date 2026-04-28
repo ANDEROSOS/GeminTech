@@ -2,21 +2,27 @@
 CONFIGURACION NPV TUNNEL / HTTP INJECTOR
 ============================================
 
-SERVIDOR: cloudrun-gemintech-1029036414572.us-south1.run.app
+SERVIDOR: gemintech-proxy-127qfhmifa-rj.a.run.app
 PUERTO: 443
 SSL: ON
 
 PAYLOAD:
-GET / HTTP/1.1[crlf]Host: cloudrun-gemintech-1029036414572.us-south1.run.app[crlf]Connection: Upgrade[crlf]Upgrade: websocket[crlf]x-auth-key: Ecuador2026_Secreto[crlf][crlf]
+GET / HTTP/1.1[crlf]Host: gemintech-proxy-127qfhmifa-rj.a.run.app[crlf]Connection: Upgrade[crlf]Upgrade: websocket[crlf]x-auth-key: Ecuador2026_Secreto[crlf][crlf]
 
 SNI: firebase-settings.crashlytics.com
 
 ============================================
 DATOS SSH
 ============================================
-IP: 34.19.51.198
+IP: 172.245.184.188
 Puerto: 22
 Usuario: (crear en el panel con 'menu' opcion 1)
+
+============================================
+CLOUD RUN
+============================================
+URL:    https://gemintech-proxy-127qfhmifa-rj.a.run.app
+Region: southamerica-east1
 
 ============================================
 NOTAS
@@ -24,3 +30,4 @@ NOTAS
 - El header 'x-auth-key' es OBLIGATORIO
 - Cambiar 'Ecuador2026_Secreto' por tu key personalizada
 - Asegurar que el VPS tenga puerto 80 abierto
+- BadVPN UDPGW en puerto 7300 del VPS
