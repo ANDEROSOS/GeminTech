@@ -1,0 +1,174 @@
+#!/bin/bash
+# MENU PRINCIPAL - Panel VPS Completo v3.0
+# Conectado a la API GeminTech
+# Basado en GeminTech - Version Libre Sin Licencia
+# @gemintechchannel
+
+# Directorio de instalacion
+[[ -d "/etc/gemintech" ]] && DIR="/etc/gemintech" || DIR="$(dirname "$(readlink -f "$0")")"
+
+# Cargar modulo
+source "$DIR/module.sh" 2>/dev/null || {
+    RED='\033[1;31m'; GREEN='\033[1;32m'; YELLOW='\033[1;33m'
+    BLUE='\033[1;34m'; CYAN='\033[1;36m'; WHITE='\033[1;37m'; NC='\033[0m'
+}
+
+# Obtener informacion del sistema (via API cuando sea posible)
+get_system_info() {
+    # Intentar obtener IP de la API
+    if api_check 2>/dev/null; then
+        local status_resp
+        status_resp=$(api_get "/status")
+        IP=$(json_field "$status_resp" "vps_ip")
+        TOTAL_USUARIOS=$(json_field "$status_resp" "total_usuarios")
+        UPTIME_API=$(json_field "$status_resp" "uptime")
+        MEM_API=$(json_field "$status_resp" "memoria")
+    fi
+
+    # Fallback a métodos directos
+    [[ -z "$IP" ]] && IP=$(curl -s ifconfig.me 2>/dev/null || curl -s icanhazip.com 2>/dev/null || hostname -I | awk '{print $1}')
+    FECHA=$(date +"%d-%m-%Y")
+    HORA=$(date +"%H:%M:%S")
+    SO=$(cat /etc/os-release 2>/dev/null | grep "PRETTY_NAME" | cut -d'"' -f2)
+    [[ -z "$SO" ]] && SO=$(uname -o)
+}
+
+# Obtener estadisticas de usuarios (via API cuando sea posible)
+get_stats() {
+    ACTIVA=0; EXPIRADA=0; BLOQUEADA=0; TOTAL=0
+
+    # Intentar via API
+    if api_check 2>/dev/null; then
+        local lista_resp
+        lista_resp=$(api_get "/usuarios/listar")
+
+        # Contar estados
+        TOTAL=$(echo "$lista_resp" | grep -o '"estado":"[^"]*"' | wc -l)
+        ACTIVA=$(echo "$lista_resp" | grep -o '"estado":"Activo"' | wc -l)
+        BLOQUEADA=$(echo "$lista_resp" | grep -o '"estado":"Bloqueado"' | wc -l)
+        EXPIRADA=$((TOTAL - ACTIVA - BLOQUEADA))
+    else
+        # Fallback directo
+        usuarios=$(grep "/bin/false" /etc/passwd | grep -v "syslog\|nologin\|nobody" | cut -d: -f1)
+        current_date=$(date +%s)
+
+        for user in $usuarios; do
+            ((TOTAL++))
+
+            # Verificar bloqueo
+            status_pass=$(passwd -S "$user" 2>/dev/null | awk '{print $2}')
+            [[ "$status_pass" == "L" ]] && { ((BLOQUEADA++)); continue; }
+
+            exp_date_str=$(chage -l "$user" 2>/dev/null | grep "Account expires" | cut -d: -f2)
+
+            if [[ "$exp_date_str" == *"never"* ]]; then
+                ((ACTIVA++))
+            else
+                exp_date=$(date -d "$exp_date_str" +%s 2>/dev/null)
+                if [[ $? -eq 0 && $current_date -gt $exp_date ]]; then
+                    ((EXPIRADA++))
+                else
+                    ((ACTIVA++))
+                fi
+            fi
+        done
+    fi
+}
+
+# Banner Principal
+banner() {
+    clear
+    get_system_info
+    get_stats
+
+    echo -e "${RED}════════════════════════════════════════════════════════════${NC}"
+    echo -e "                      ${YELLOW}@gemintechchannel${NC}"
+    echo -e "${RED}╔══════════════════════════════════════════════════════════╗${NC}"
+    echo -e "  ${WHITE}S.O:    ${CYAN}$SO ${WHITE}Fecha:  ${CYAN}$FECHA${NC}"
+    echo -e "  ${WHITE}IP:     ${CYAN}$IP                 ${WHITE}Hora:   ${CYAN}$HORA${NC}"
+    echo -e "${RED}╚══════════════════════════════════════════════════════════╝${NC}"
+    echo -e "    ${GREEN}ACTIVA: $ACTIVA    ${RED}EXPIRADA: $EXPIRADA    ${BLUE}BLOQUEADA: $BLOQUEADA    ${YELLOW}TOTAL: $TOTAL${NC}"
+    echo -e "${RED}════════════════════════════════════════════════════════════${NC}"
+
+    # Estado de la API
+    if api_check 2>/dev/null; then
+        echo -e "    ${GREEN}API: CONECTADA${NC} ${CYAN}(${API_BASE})${NC}"
+    else
+        echo -e "    ${RED}API: DESCONECTADA${NC} ${YELLOW}(${API_BASE})${NC}"
+    fi
+    echo -e "${RED}════════════════════════════════════════════════════════════${NC}"
+}
+
+# Menu Principal
+menu_principal() {
+    while true; do
+        banner
+
+        echo -e "  ${GREEN}[1]>${NC} ${WHITE}ADMINISTRAR CUENTAS (SSH/DROPBEAR) — API${NC}"
+        echo -e "${RED}------------------------------------------------------------${NC}"
+        echo -e "  ${GREEN}[2]>${NC} ${WHITE}CONFIGURACION DE PROTOCOLOS${NC}"
+        echo -e "  ${GREEN}[3]>${NC} ${WHITE}HERRAMIENTAS EXTRAS — API${NC}"
+        echo -e "${RED}------------------------------------------------------------${NC}"
+        echo -e "  ${GREEN}[4]>${NC} ${WHITE}CONFIGURACION DEL SCRIPT — API${NC}"
+        echo -e "  ${GREEN}[5]>${NC} ${WHITE}IDIOMA / LANGUAGE${NC}"
+        echo -e "${RED}------------------------------------------------------------${NC}"
+        echo -e "  ${GREEN}[6]>${NC} ${RED}[!] DESINSTALAR PANEL${NC}"
+        echo -e "${RED}════════════════════════════════════════════════════════════${NC}"
+        echo -e "  ${GREEN}[0]${NC} ${RED}SALIR DEL VPS${NC}  ${GREEN}[7]${NC} ${WHITE}SALIR DEL SCRIPT${NC}  ${GREEN}[8]${NC} ${BLUE}REINICIAR VPS${NC}"
+        echo -e "${RED}════════════════════════════════════════════════════════════${NC}"
+
+        read -p " Ingresa una Opcion: " opcion
+
+        case $opcion in
+            1)
+                [[ -f "$DIR/user.sh" ]] && { source "$DIR/user.sh"; menu_usuarios; } || { echo -e "${RED}  Error: user.sh no encontrado${NC}"; sleep 2; }
+                ;;
+            2)
+                [[ -f "$DIR/services.sh" ]] && { source "$DIR/services.sh"; menu_servicios; } || { echo -e "${RED}  Error: services.sh no encontrado${NC}"; sleep 2; }
+                ;;
+            3)
+                [[ -f "$DIR/extras.sh" ]] && { source "$DIR/extras.sh"; menu_extras; } || { echo -e "${RED}  Error: extras.sh no encontrado${NC}"; sleep 2; }
+                ;;
+            4)
+                [[ -f "$DIR/config.sh" ]] && { source "$DIR/config.sh"; menu_config; } || { echo -e "${RED}  Error: config.sh no encontrado${NC}"; sleep 2; }
+                ;;
+            5)
+                echo -e "\n  ${YELLOW}Idioma actual: Espanol${NC}"
+                echo -e "  ${CYAN}(Unica opcion disponible en esta version)${NC}"
+                read -p "  Presione ENTER para continuar..."
+                ;;
+            6)
+                echo -e "\n  ${RED}DESINSTALAR PANEL${NC}"
+                read -p "  Confirmar desinstalacion? [s/N]: " confirm
+                if [[ "$confirm" == "s" || "$confirm" == "S" ]]; then
+                    rm -f /usr/bin/gemintech /usr/local/bin/gemintech
+                    rm -rf /etc/gemintech
+                    echo -e "  ${GREEN}Panel GeminTech desinstalado correctamente${NC}"
+                    exit 0
+                fi
+                ;;
+            0)
+                echo -e "\n  ${YELLOW}Cerrando sesion...${NC}"
+                exit 0
+                ;;
+            7)
+                exit 0
+                ;;
+            8)
+                echo -e "\n  ${RED}Reiniciando VPS en 5 segundos...${NC}"
+                sleep 5
+                reboot
+                ;;
+            *)
+                echo -e "  ${RED}Opcion invalida${NC}"
+                sleep 1
+                ;;
+        esac
+    done
+}
+
+# Verificar root
+[[ $EUID -ne 0 ]] && { echo "Este script debe ejecutarse como root"; exit 1; }
+
+# Ejecutar menu
+menu_principal

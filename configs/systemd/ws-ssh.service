@@ -1,0 +1,17 @@
+[Unit]
+Description=WebSocket SSH Tunnel — GeminTech
+Documentation=https://github.com/ANDEROSOS/GeminTech
+After=network.target sshd.service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/python3 /usr/local/bin/ws-ssh.py 80 22
+Restart=always
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=ws-ssh
+
+[Install]
+WantedBy=multi-user.target

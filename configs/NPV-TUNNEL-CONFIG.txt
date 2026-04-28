@@ -1,0 +1,64 @@
+╔══════════════════════════════════════════════════════════╗
+║      CONFIGURACION NPV TUNNEL - VPS ADM CLON             ║
+║      @gemintechchannel - FUNCIONANDO 100%                 ║
+╚══════════════════════════════════════════════════════════╝
+
+============================================
+DATOS DEL VPS
+============================================
+IP: 34.19.51.198
+Usuario SSH: (crear en panel con 'menu' opcion 1)
+Puerto SSH: 22
+Puerto UDPGW: 7300
+
+============================================
+CONFIGURACION NPV TUNNEL
+============================================
+
+Protocol:       SSH-TLS-Payload
+SSH Host:       firebase-settings.crashlytics.com
+SSH Port:       443
+Udpgw Port:     7300
+TLS Version:    TLS 1.2
+SNI:            firebase-settings.crashlytics.com
+
+============================================
+PAYLOAD (COPIAR EXACTO)
+============================================
+
+GET / HTTP/1.1[crlf]Host: cloudrun-gemintech-1029036414572.us-south1.run.app[crlf]Connection: Upgrade[crlf]Upgrade: websocket[crlf]x-auth-key: Ecuador2026_Secreto[crlf][crlf]
+
+============================================
+CLOUD RUN
+============================================
+URL: https://cloudrun-gemintech-1029036414572.us-south1.run.app
+Region: us-south1
+
+Variables de entorno:
+  PROXY_TARGETS: 34.19.51.198:80
+  KEY_TARGETS: Ecuador2026_Secreto
+
+============================================
+IMPORTANTE
+============================================
+- El header 'x-auth-key' es OBLIGATORIO en el payload
+- La KEY debe coincidir con KEY_TARGETS del Cloud Run
+- El VPS debe tener puerto 80 abierto (WebSocket)
+- El VPS debe tener BadVPN en puerto 7300
+
+============================================
+SERVICIOS ACTIVOS EN EL VPS
+============================================
+- SSH: Puerto 22
+- WebSocket Python: Puerto 80
+- BadVPN UDPGW: Puerto 7300
+- python.80.service: activo
+- badvpn-udpgw.7300.service: activo
+
+============================================
+COMANDO PARA INSTALAR EN OTRO VPS
+============================================
+
+bash <(curl -sL https://raw.githubusercontent.com/ANDEROSOS/GeminTech/master/install.sh)
+
+============================================

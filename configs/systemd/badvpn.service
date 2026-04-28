@@ -1,0 +1,17 @@
+[Unit]
+Description=BadVPN UDP Gateway — GeminTech
+Documentation=https://github.com/ANDEROSOS/GeminTech
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/etc/gemintech/badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 500 --max-connections-for-client 10
+Restart=always
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=badvpn
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,20 @@
+[Unit]
+Description=GeminTech FastAPI Backend
+Documentation=https://github.com/TU_USUARIO/GeminTech
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/gemintech/api
+# Escucha en 0.0.0.0 para que el panel web externo pueda conectarse
+ExecStart=/usr/bin/python3 -m uvicorn main:app --host 0.0.0.0 --port 9000 --workers 1
+Restart=always
+RestartSec=5
+EnvironmentFile=/opt/gemintech/api/.env
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=gemintech-api
+
+[Install]
+WantedBy=multi-user.target

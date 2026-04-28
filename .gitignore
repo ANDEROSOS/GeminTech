@@ -1,0 +1,35 @@
+# ─── Credenciales personales — NO subir ──────────────────────
+.env
+api/.env
+
+# ─── PHP — datos generados en producción ─────────────────────
+web-panel/pagos.json
+web-panel/data_admins.json
+web-panel/admins.json
+web-panel/vps_list.json
+
+# ─── Python ───────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+env/
+
+# ─── Node.js ──────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+
+# ─── Logs ─────────────────────────────────────────────────────
+*.log
+logs/
+
+# ─── Sistema Operativo ────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── IDEs ─────────────────────────────────────────────────────
+.vscode/settings.json
+.idea/
+*.swp
